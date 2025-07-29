@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Resume-JD Matcher
 
-## Getting Started
+An **AI-powered application** that analyzes resumes against job descriptions to generate **match percentages**, **detailed analysis**, **keyword insights**, and **improvement suggestions**.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Key Features
+- **Match Percentage** – Evaluates how well a resume matches the job description
+- **Resume Analyzer** – Analyzes content, skills, and structure
+- **Improvement Suggestions** – Offers personalized recommendations
+- **Keyword Analysis** – Detects missing and present keywords
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack
+- **Frontend:** Next.js 14, TypeScript, Tailwind CSS, React Dropzone, Lucide React, React Hot Toast
+- **Backend:** Firebase Firestore, Python FastAPI
+- **AI/ML:** NLTK, spaCy, scikit-learn, Transformers (NLP models)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🔄 System Workflow
+1. User uploads a resume (PDF/DOC/DOCX/TXT)
+2. User pastes the job description
+3. The AI backend processes the inputs to:
+    - ✅ Calculate match percentage
+    - ✅ Provide keyword and skill analysis
+    - ✅ Suggest improvements to the resume
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🧩 API Overview
+The backend is built using **FastAPI** and exposes endpoints to handle text analysis using ML/NLP models.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Example request to `/api/analyze`:
+```json
+{
+  "resume_text": "Your resume text...",
+  "job_description": "The job description...",
+  "analysis_type": "match|analyze|suggestions|keywords"
+}
