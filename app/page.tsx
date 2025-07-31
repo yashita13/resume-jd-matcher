@@ -6,7 +6,7 @@ export default function Home() {
 
 
             <h1 className="text-4xl font-bold mt-6 mb-3 flex flex-col items-center">Resume-JD Matcher</h1>
-            <p className="text-lg font-medium text-gray-500 flex flex-col items-center">Powered by AI, built for job seekers—match your resume to job descriptions with precision and ease.</p>
+            <p className="text-lg font-medium text-gray-500 flex flex-col items-center">Powered by AI, built for job seekers—Empower your next Resume shortlisting process.</p>
 
             <div className=" p-8 min-h-screen text-white">
                 <div className="flex flex-row justify-center items-stretch gap-6 p-6 w-[90%] mx-auto">
