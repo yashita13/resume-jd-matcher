@@ -44,7 +44,6 @@
 body {
   background-color: var(--background);
   color: var(--foreground);
-/* removed a line directly from github */
 }
 
 .dark {
