@@ -1,5 +1,8 @@
 "use client";
-import { useState } from "react";
+import {useState} from "react";
+import ReactMarkdown from "react-markdown";
+import { Target, FileText, Lightbulb, Search } from "lucide-react";
+
 
 export default function ResumeMatcher() {
     const [resumeFile, setResumeFile] = useState<File | null>(null);
@@ -24,7 +27,7 @@ export default function ResumeMatcher() {
             formData.append("userId", "demo-user");
             formData.append("type", type);
 
-            const response = await fetch("/api/match", { method: "POST", body: formData });
+            const response = await fetch("/api/match", {method: "POST", body: formData});
 
             if (!response.ok) {
                 const text = await response.text();
@@ -44,78 +47,156 @@ export default function ResumeMatcher() {
 
     return (
         <>
-            <h1 className="text-4xl font-bold mt-6 mb-3 flex flex-col items-center">Resume-JD Matcher</h1>
-            <p className="text-lg font-medium text-gray-500 flex flex-col items-center">Powered by AI, built for job seekers—Empower your next Resume shortlisting process.</p>
+            <section className="relative z-10 w-full m-6 px-4">
 
-            <div className=" p-8 min-h-screen text-white">
-                <div className="flex flex-row justify-center items-stretch gap-6 p-6 w-[90%] mx-auto">
-                    {/* Resume Upload Section */}
-                    <div className="bg-[#1e293b] rounded-xl shadow-md p-6 w-[48%] flex flex-col">
-                        <h3 className="text-3xl font-semibold mb-6 text-center">Upload Your Document</h3>
-                        <div className="flex flex-row items-center space-x-4 mb-4">
-                            <input
-                                type="file"
-                                accept="application/pdf"
-                                onChange={(e) => setResumeFile(e.target.files?.[0] || null)}
-                                className="border border-gray-500 bg-[#0f172a] text-white px-3 py-2 rounded-md w-full"
-                            />
-                            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
-                                Upload
-                            </button>
-                        </div>
-                        {/*<textarea*/}
-                        {/*    className="border border-gray-500 bg-[#0f172a] text-white rounded-md w-full h-full p-3 resize-none"*/}
-                        {/*    placeholder="Paste your resume here 👇"*/}
-                        {/*></textarea>*/}
+                {/* Heading */}
+                <div className="max-w-6xl mx-auto flex flex-col items-center text-center space-y-4">
+                    <h1 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-purple-300 to-purple-300 bg-clip-text text-transparent">
+                        Resume-JD Matcher
+                    </h1>
+                    <p className="text-gray-300 text-lg max-w-2xl">
+                        Upload your resume and paste the job description to instantly analyze compatibility and improve
+                        your chances of getting shortlisted.
+                    </p>
+                </div>
+
+                {/* Upload and JD Input */}
+                <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                    {/* Resume Upload */}
+                    <div className="bg-gradient-to-br from-[#1a1a1d] to-[#0f0f0f] border border-[#27272a] rounded-2xl p-6 shadow-xl">
+                        <h3 className="text-2xl font-bold mb-4 text-white">Upload Your Resume</h3>
+
+                        {/* Hidden input */}
+                        <input
+                            id="resumeUpload"
+                            type="file"
+                            accept="application/pdf"
+                            onChange={(e) => setResumeFile(e.target.files?.[0] || null)}
+                            className="hidden"
+                        />
+
+                        {/* Readonly input displaying file name */}
+                        <input
+                            type="text"
+                            value={resumeFile ? resumeFile.name : ""}
+                            readOnly
+                            placeholder="No file selected..."
+                            className="w-full bg-black border border-gray-600 rounded-xl p-3 text-white mb-4"
+                        />
+
+                        {/* Button to open file picker */}
+                        <label
+                            htmlFor="resumeUpload"
+                            className="inline-block cursor-pointer px-4 py-2 bg-gradient-to-r from-purple-600 to-purple-500 text-white font-medium rounded-xl hover:opacity-90 transition"
+                        >
+                            Choose File
+                        </label>
                     </div>
 
-                    {/* Job Description Section */}
-                    <div className="bg-[#1e293b] rounded-xl shadow-md p-6 w-[48%] flex flex-col">
-                        <h3 className="text-3xl font-semibold mb-4 text-center">Job Description</h3>
-                        <p className="text-lg text-gray-400 mb-2">
-                            Paste the job description you're looking for here.'
-                        </p>
+                    {/* JD Paste */}
+                    <div className="bg-gradient-to-br from-[#1a1a1d] to-[#0f0f0f] border border-[#27272a] rounded-2xl p-6 shadow-xl">
+                        <h3 className="text-2xl font-bold mb-4 text-white">Job Description</h3>
                         <textarea
-                            className="border border-gray-500 bg-[#0f172a] text-white rounded-md w-full h-full p-3 resize-none"
-                            placeholder="Paste job description here..."
                             value={jdText}
                             onChange={(e) => setJdText(e.target.value)}
+                            placeholder="Paste the job description here..."
+                            className="w-full h-48 bg-black border border-gray-600 rounded-xl p-3 text-white resize-none no-scrollbar focus:outline-none focus:ring-2 focus:ring-purple-600"
                         />
                     </div>
                 </div>
 
-                {/* ✅ Analysis Type Cards */}
-                <div className="bg-[#0f172a] flex flex-row justify-center items-stretch gap-6 p-6 w-[85%] mx-auto rounded-lg">
-                    <div className="w-[85%] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-8">
-                        {[
-                            { type: "matchPercentage", icon: "🎯", title: "Match Percentage", desc: "See how well your resume matches" },
-                            { type: "resumeAnalyzer", icon: "📄", title: "Resume Analyzer", desc: "Detailed resume analysis" },
-                            { type: "improvementSuggestions", icon: "💡", title: "Improvement Suggestions", desc: "Get personalized recommendations" },
-                            { type: "missingKeywords", icon: "🔍", title: "Missing Keywords", desc: "Find missing important keywords" }
-                        ].map((card) => (
-                            <div
-                                key={card.type}
-                                onClick={() => analyzeResume(card.type)}
-                                className="cursor-pointer bg-[#1e293b] rounded-lg shadow-md px-6 py-4 flex flex-col items-center text-center hover:bg-[#334155] transition"
-                            >
-                                <div className="text-4xl mb-3">{card.icon}</div>
-                                <h4 className="text-lg font-semibold mb-1">{card.title}</h4>
-                                <p className="text-sm text-gray-400">{card.desc}</p>
-                            </div>
-                        ))}
-                    </div>
+                {/* Analysis Type Cards */}
+                <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+                    {[
+                        {
+                            type: "matchPercentage",
+                            icon: <Target className="h-10 w-10 text-purple-400 mx-auto" />,
+                            title: "Match %",
+                            desc: "How well you match"
+                        },
+                        {
+                            type: "resumeAnalyzer",
+                            icon: <FileText className="h-10 w-10 text-purple-400 mx-auto" />,
+                            title: "Analyzer",
+                            desc: "Detailed analysis"
+                        },
+                        {
+                            type: "improvementSuggestions",
+                            icon: <Lightbulb className="h-10 w-10 text-purple-400 mx-auto" />,
+                            title: "Suggestions",
+                            desc: "What to improve"
+                        },
+                        {
+                            type: "missingKeywords",
+                            icon: <Search className="h-10 w-10 text-purple-400 mx-auto" />,
+                            title: "Missing Keywords",
+                            desc: "Important terms"
+                        }
+
+
+                    ]
+                        .map((card) => (
+                        <div
+                            key={card.type}
+                            onClick={() => analyzeResume(card.type)}
+                            className="cursor-pointer bg-gradient-to-br from-[#1f1f22] to-[#27272a] hover:scale-[1.03] hover:shadow-lg hover:border-purple-500 border border-[#333] rounded-2xl p-6 text-center shadow-md transition duration-200"
+                        >
+                            <div className="text-3xl mb-3">{card.icon}</div>
+                            <h4 className="text-lg font-semibold text-white">{card.title}</h4>
+                            <p className="text-gray-400 text-sm">{card.desc}</p>
+                        </div>
+                    ))}
                 </div>
 
-                {/* ✅ Show Analysis Below UI */}
-                {loading && <p className="text-center text-lg">Analyzing...</p>}
-
-                {analysis && (
-                    <div className="bg-gray-900 p-6 rounded-lg w-[85%] mx-auto mt-6">
-                        <h2 className="text-2xl font-bold mb-4">{selectedType.replace(/([A-Z])/g, " $1")}</h2>
-                        <pre className="whitespace-pre-wrap text-gray-300">{JSON.stringify(analysis, null, 2)}</pre>
+                {/* Loading */}
+                {loading && (
+                    <div className="flex justify-center items-center mt-8">
+                        <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-purple-500"></div>
+                        <p className="ml-4 text-lg text-white">Analyzing your resume...</p>
                     </div>
                 )}
-            </div>
+
+                {/* Analysis Result */}
+                {analysis && (
+                    <div className="mt-12 max-w-5xl mx-auto bg-gradient-to-br from-[#1a1a1d] to-[#0f0f0f] border border-[#27272a] rounded-2xl p-6 space-y-6 shadow-xl">
+                        <h2 className="text-3xl font-extrabold text-center mb-6 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+                            {selectedType
+                                .replace(/([A-Z])/g, " $1")
+                                .replace(/\b\w/g, (c) => c.toUpperCase())}
+                        </h2>
+
+                        {typeof analysis === "string" ? (
+                            <div className="prose prose-invert prose-xl prose-p:leading-relaxed prose-p:mb-4 max-w-none text-gray-300">
+                                <ReactMarkdown>{analysis}</ReactMarkdown>
+                            </div>
+                        ) : (
+                            Object.entries(analysis).map(([key, value]) => (
+                                <div
+                                    key={key}
+                                    className="bg-black border border-[#333] rounded-xl p-5 space-y-3"
+                                >
+                                    <h3 className="text-xl font-semibold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+                                        {key
+                                            .replace(/([A-Z])/g, " $1")
+                                            .replace(/\b\w/g, (c) => c.toUpperCase())}
+                                    </h3>
+                                    {typeof value === "string" ? (
+                                        <div className="prose prose-invert max-w-none text-gray-300">
+                                            <ReactMarkdown>{value}</ReactMarkdown>
+                                        </div>
+                                    ) : (
+                                        <pre className="text-gray-300 whitespace-pre-wrap break-words">
+                  {JSON.stringify(value, null, 2)}
+                </pre>
+                                    )}
+                                </div>
+                            ))
+                        )}
+                    </div>
+                )}
+            </section>
         </>
+
+
     );
 }
